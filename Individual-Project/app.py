@@ -21,11 +21,27 @@ db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
 def HOME():
-    return render_template("Home.html")
+    return render_template("home.html")
 
-@app.route('/store', methods=['GET', 'POST'])
-def LOGIN():
-    return render_template("Store.html")
+@app.route('/letsstart', methods=['GET', 'POST'])
+def User():
+    return render_template("login.html")
+
+@app.route('/popstore', methods=['GET', 'POST'])
+def POP():
+    return render_template("POP.html")
+
+@app.route('/rockstore', methods=['GET', 'POST'])
+def Rock():
+    return render_template("Rock.html")
+
+@app.route('/jazzstore', methods=['GET', 'POST'])
+def Jazz():
+    return render_template("Jazz.html")
+
+@app.route('/countrystore', methods=['GET', 'POST'])
+def Country():
+    return render_template("country.html")
 
 #Code goes above here
 

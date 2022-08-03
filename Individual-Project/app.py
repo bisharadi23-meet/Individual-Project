@@ -20,12 +20,11 @@ auth = firebase.auth()
 db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
-def HOME():
-    return render_template("home.html")
-
-@app.route('/letsstart', methods=['GET', 'POST'])
-def User():
-    return render_template("login.html")
+def home():
+    if 'user' in login_session:
+        x=db.child("username").child(login_session['user']['localId']).get().val()
+        return render_template("home.html",x=x)
+    return redirect(url_for('login'))
 
 @app.route('/popstore', methods=['GET', 'POST'])
 def POP():
@@ -42,6 +41,39 @@ def Jazz():
 @app.route('/countrystore', methods=['GET', 'POST'])
 def Country():
     return render_template("country.html")
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = ""
+
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            login_session['user'] = auth.sign_in_with_email_and_password(email, password)
+            return redirect(url_for('home'))
+        except:
+            error = "Authentication failed"
+            return error
+    else:
+        return render_template("login.html")
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        try:
+            email = request.form['email']
+            password = request.form['password']
+            login_session['user'] = auth.create_user_with_email_and_password(email, password)
+            user = {"email":request.form["email"], "password":request.form["password"] ,"username":request.form["username"]}
+            db.child("Users").child(login_session['user']['localId']).set(user)
+            return redirect(url_for('home'))
+        except:
+            error = "Authentication failed"
+            return (error)
+    else:
+        return render_template("signup.html")
+
 
 #Code goes above here
 

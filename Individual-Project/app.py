@@ -21,8 +21,9 @@ db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if 'user' in login_session:
-        x=db.child("username").child(login_session['user']['localId']).get().val()
+    if None != login_session['user']:
+        print(login_session)
+        x=db.child("Users").child(login_session['user']['localId']).child('username').get().val()
         return render_template("home.html",x=x)
     return redirect(url_for('login'))
 
@@ -73,6 +74,12 @@ def signup():
             return (error)
     else:
         return render_template("signup.html")
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    login_session['user'] = None
+    auth.current_user = None
+    return redirect(url_for('login'))
 
 
 #Code goes above here

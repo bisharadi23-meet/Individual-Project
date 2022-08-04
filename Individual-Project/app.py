@@ -21,10 +21,11 @@ db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if None != login_session['user']:
-        print(login_session)
-        x=db.child("Users").child(login_session['user']['localId']).child('username').get().val()
-        return render_template("home.html",x=x)
+    if 'user' in login_session:
+        if None != login_session['user']:
+            print(login_session)
+            x=db.child("Users").child(login_session['user']['localId']).child('username').get().val()
+            return render_template("home.html",x=x)
     return redirect(url_for('login'))
 
 @app.route('/popstore', methods=['GET', 'POST'])

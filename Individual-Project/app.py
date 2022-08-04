@@ -39,6 +39,10 @@ def Rock():
 def Jazz():
     return render_template("Jazz.html")
 
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+    return render_template("cart.html")
+
 @app.route('/countrystore', methods=['GET', 'POST'])
 def Country():
     return render_template("country.html")
